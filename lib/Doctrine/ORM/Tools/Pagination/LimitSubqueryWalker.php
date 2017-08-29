@@ -97,22 +97,28 @@ class LimitSubqueryWalker extends TreeWalkerAdapter
         array_unshift($selectExpressions, new SelectExpression($pathExpression, '_dctrn_id'));
         $AST->selectClause->selectExpressions = $selectExpressions;
 
-        if (isset($AST->orderByClause)) {
-            foreach ($AST->orderByClause->orderByItems as $item) {
-                if ($item->expression instanceof PathExpression) {
-                    $pathExpression = new PathExpression(
-                        PathExpression::TYPE_STATE_FIELD | PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION,
-                        $item->expression->identificationVariable,
-                        $item->expression->field
-                    );
-                    $pathExpression->type = PathExpression::TYPE_STATE_FIELD;
-                    $AST->selectClause->selectExpressions[] = new SelectExpression(
-                        $pathExpression,
-                        '_dctrn_ord' . $this->_aliasCounter++
-                    );
-                }
-            }
-        }
+
+        /**
+         * comentado pois estava se perdendo na hora de gerar mais de um sort
+         * @author Elielton Kremer
+         * @since 2017-08-25
+         */
+//        if (isset($AST->orderByClause)) {
+//            foreach ($AST->orderByClause->orderByItems as $item) {
+//                if ($item->expression instanceof PathExpression) {
+//                    $pathExpression = new PathExpression(
+//                        PathExpression::TYPE_STATE_FIELD | PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION,
+//                        $item->expression->identificationVariable,
+//                        $item->expression->field
+//                    );;
+//                    $pathExpression->type = PathExpression::TYPE_STATE_FIELD;
+//                    $AST->selectClause->selectExpressions[] = new SelectExpression(
+//                        $pathExpression,
+//                        '_dctrn_ord' . $this->_aliasCounter++
+//                    );
+//                }
+//            }
+//        }
 
         $AST->selectClause->isDistinct = true;
     }
